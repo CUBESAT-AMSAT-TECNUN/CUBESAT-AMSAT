@@ -1117,6 +1117,57 @@ static int init_rf() { // Configura módulo de radiofrecuencia AX5043
   return (1);
 }
 
+// ============================================================================================================================================================================================================================================= 
+// - ENVIO DATOS TELEMETRIA EN CW Y APSK Y DISTINTOS MODOS (NO FOX TELEM)
+// ============================================================================================================================================================================================================================================= 
+
+/* Esta función get_tlm() es complementaria a la anterior y se encarga de formatear y transmitir la telemetría del 
+CubeSat en diferentes formatos, principalmente para radioaficionados usando el protocolo APRS (Automatic Packet Reporting System). 
+Aquí sus principales funcionalidades:
+
+Formateo de Datos:
+  Convierte las mediciones de los sensores en formato de telemetría legible:
+    Voltajes de bus y baterías
+    Corrientes de los paneles solares (X, Y, Z)
+    Temperatura
+    Otros parámetros del sistema
+
+Múltiples Modos de Transmisión:
+  Soporta varios modos de operación:
+    CW (Morse)
+    AFSK (Audio Frequency Shift Keying para APRS)
+    Transmisión digital usando el chip AX5043
+    APRS con coordenadas geográficas
+
+Gestión de Paquetes APRS:
+  Construye paquetes APRS con:
+    Indicativo del satélite
+    Coordenadas (latitud/longitud)
+    Datos de telemetría
+    Información de estado
+
+Sistema de Registro:
+  Guarda los datos de telemetría en archivos locales
+  Registra timestamps con las mediciones
+  Mantiene un log de las transmisiones
+
+Control de Hardware:
+  Maneja el LED de transmisión
+  Controla el hardware de radio (AX5043 o rpitx)
+  Gestiona los tiempos entre transmisiones
+
+Características de Seguridad:
+  Modo de ahorro de batería
+  Verificación de filtro paso banda antes de transmitir
+  Reintentos en caso de fallos de transmisión
+
+La diferencia principal con la función anterior es que mientras get_tlm_fox() se centra en el protocolo Fox usado en
+algunos CubeSats de AMSAT, esta función get_tlm() está más orientada a la transmisión de telemetría vía APRS, que es un protocolo 
+más común entre radioaficionados y permite que más operadores en tierra puedan recibir y decodificar los datos del satélite.
+También es notable que esta función está diseñada para ser más accesible para los radioaficionados, ya que usa formatos 
+estándar como CW (Morse) y APRS, que pueden ser recibidos con equipamiento más común, mientras que el protocolo Fox requiere 
+software específico para su decodificación */
+
 void get_tlm(void) {
 
   FILE * txResult;
@@ -1396,6 +1447,64 @@ void get_tlm(void) {
 
   return;
 }
+// ============================================================================================================================================================================================================================================= 
+
+
+// ============================================================================================================================================================================================================================================= 
+// - ENVIO DATOS TELEMETRIA EN BPSK Y FSK (NECESITA PROGRAMA PARA DECODIFICACION -> FOX TELEM)
+// ============================================================================================================================================================================================================================================= 
+
+/* Esta función get_tlm_fox() es una parte crítica del software de un CubeSat de radioaficionados, específicamente parece estar 
+relacionada con el sistema de telemetría. Voy a explicar sus principales funcionalidades:
+
+Procesamiento de Telemetría:
+  Recolecta datos de varios sensores del CubeSat incluyendo:
+    Voltajes y corrientes de los paneles solares (X, Y, Z, tanto positivos como negativos)
+    Voltaje y corriente de la batería
+    Datos del bus de energía (PSU)
+    Acelerómetros en los 3 ejes
+    Giroscopios
+    Temperatura
+    Presión
+    Altitud
+    Humedad
+    RSSI (intensidad de señal)
+
+Modos de Transmisión:
+  Soporta dos modos de transmisión:
+    FSK (Frequency Shift Keying)
+    BPSK (Binary Phase Shift Keying)
+
+Estructura de Trama:
+  Construye tramas de datos que incluyen:
+    Cabecera con información de identificación
+    Datos de telemetría actuales
+    En modo BPSK, también incluye valores máximos y mínimos de los sensores
+    Códigos de corrección de errores (Reed-Solomon)
+    Codificación 8b10b para la transmisión
+
+Estado del Sistema:
+  Monitorea varios estados del CubeSat como:
+    Despliegue de antenas (TX y RX)
+    Modo seguro
+    Fallos en diferentes subsistemas
+    Conteo de comandos recibidos desde tierra
+    Conteo de reinicios
+
+Transmisión:
+  Genera las formas de onda para la transmisión de radio
+  Utiliza un socket para enviar los datos al hardware de transmisión
+  Implementa delays y tiempos de espera para mantener el ciclo de transmisión
+  Incluye mecanismos de reintento si la transmisión falla
+
+Control de Energía:
+  Monitorea el estado de los paneles solares
+  Supervisa el sistema de energía del satélite
+  Registra valores máximos y mínimos de voltajes y corrientes
+
+Este código es típico de satélites amateurs tipo Fox o similares, donde es crucial mantener informados a los 
+radioaficionados en tierra sobre el estado del satélite. La telemetría permite a los operadores en tierra 
+monitorear la salud del satélite y detectar cualquier problema potencial */
 
 void get_tlm_fox() {
 
@@ -2068,6 +2177,9 @@ void get_tlm_fox() {
 
   return;
 }
+
+// ============================================================================================================================================================================================================================================= 
+
 
 // code by https://stackoverflow.com/questions/25161377/open-a-cmd-program-with-full-functionality-i-o/25177958#25177958
 
