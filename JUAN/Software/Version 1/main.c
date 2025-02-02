@@ -1121,8 +1121,8 @@ static int init_rf() { // Configura módulo de radiofrecuencia AX5043
 // - ENVIO DATOS TELEMETRIA EN CW Y APSK Y DISTINTOS MODOS (NO FOX TELEM)
 // ============================================================================================================================================================================================================================================= 
 
-/* Esta función get_tlm() es complementaria a la anterior y se encarga de formatear y transmitir la telemetría del 
-CubeSat en diferentes formatos, principalmente para radioaficionados usando el protocolo APRS (Automatic Packet Reporting System). 
+/* Esta función get_tlm() se encarga de formatear y transmitir la telemetría del CubeSat en diferentes formatos, 
+principalmente para radioaficionados usando el protocolo APRS (Automatic Packet Reporting System). 
 Aquí sus principales funcionalidades:
 
 Formateo de Datos:
@@ -1161,7 +1161,7 @@ Características de Seguridad:
   Verificación de filtro paso banda antes de transmitir
   Reintentos en caso de fallos de transmisión
 
-La diferencia principal con la función anterior es que mientras get_tlm_fox() se centra en el protocolo Fox usado en
+La diferencia principal con la siguiente función es que mientras get_tlm_fox() se centra en el protocolo Fox usado en
 algunos CubeSats de AMSAT, esta función get_tlm() está más orientada a la transmisión de telemetría vía APRS, que es un protocolo 
 más común entre radioaficionados y permite que más operadores en tierra puedan recibir y decodificar los datos del satélite.
 También es notable que esta función está diseñada para ser más accesible para los radioaficionados, ya que usa formatos 
