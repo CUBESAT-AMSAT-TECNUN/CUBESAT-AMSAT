@@ -1,4 +1,6 @@
 # CUBESAT-AMSAT - JUAN LACOSTA
-Creation of a Cubesat - Amsat following Alan Johnston's instructions (https://github.com/alanbjohnston/CubeSatSim).
+In this Github you will find my version of the CubeSat.
+All the boards were built and tested and the structure of the CubeSat is already assembled. All the instructions and material needed will be saved here. 
 
-In this Github you will find the diferent versions of the Cubesat: starting from the original Cubesat of Alan Johnston and then being modified by me.
+Mi objective is to build the CubeSat, send all the data and receive the telemetry correctly and study the maximum transmission distance.
+
